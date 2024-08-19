@@ -1,5 +1,5 @@
 # Lift Equipment API
- This application will contain a library of lifting equipment and exercises that users can access. 
+ This application will contain a library of lifting equipment and exercises that third parties can access. The reason for creating this program was because all other workout APIs did not allow me to add or update exercises. I found myself more frustrated that I could not find the exercise I was looking for, so I took it into my own hands. I am using this API for another application that allows users to join gym communities and post their various workouts for others to see.
 
 ## Setup
 
@@ -10,7 +10,7 @@
 
 2. Run the application
     ```bash
-    npm run dev
+    python main.py
     ```
 
 ## Directory Structure
