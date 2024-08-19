@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<p>Welcome to the Exercise API Dashboard.</p>
+<div>
+    <button id="fetch-exercise">Fetch Exercise</button>
+    <div id="exercise-result"></div>
+</div>
+<div>
+    <button id="fetch-all-exercises">Fetch All Exercise</button>
+    <div id="all-exercise-results"></div>
+</div>
+<div>
+    <button id="fetch-num-exercises">Fetch Num Exercises</button>
+    <div id="num-exercises"></div>
+</div>
+
+<script>
+    document.getElementById('fetch-exercise').addEventListener('click', function() {
+    fetch('/api/exercise')
+        .then(response => response.json())
+        .then(responseData => {
+            const data = responseData.data
+            const resultDiv = document.getElementById('exercise-result');
+            if (data) {
+                resultDiv.innerHTML = `
+                    <h3>${data._id}</h3>
+                    <h3>${data.name}</h3>
+                    <p><strong>Type:</strong> ${data.type}</p>
+                    <p><strong>Category:</strong> ${data.category}</p>
+                    <p><strong>Muscle:</strong> ${data.muscle}</p>
+                `;
+            } else {
+                resultDiv.innerHTML = '<p>No exercise found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching exercise:', error);
+        });
+    });
+
+    document.getElementById('fetch-all-exercises').addEventListener('click', function() {
+    fetch('/api/exercises')
+        .then(response => response.json())
+        .then(responseData => {
+            const exercises = responseData.data
+            const resultDiv = document.getElementById('all-exercise-results');
+            if (exercises) {
+                resultDiv.innerHTML = exercises.map(data =>  `
+                    <h3>${data._id}</h3>
+                    <h3>${data.name}</h3>
+                    <p><strong>Type:</strong> ${data.type}</p>
+                    <p><strong>Category:</strong> ${data.category}</p>
+                    <p><strong>Muscle:</strong> ${data.muscle}</p>
+                `).join('');
+            } else {
+                resultDiv.innerHTML = '<p>No exercises found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching exercise:', error);
+        });
+    });
+
+    document.getElementById('fetch-num-exercises').addEventListener('click', function(){
+        fetch('/api/num-exercises')
+        .then(response => response.json())
+        .then(responseData => {
+            const data = responseData.data
+            const resultDiv = document.getElementById('num-exercises');
+            if (data) {
+                resultDiv.innerHTML = `
+                    <h3>Number: ${data}</h3>
+                `;
+            } else {
+                resultDiv.innerHTML = '<p>No exercise found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching exercise:', error);
+        });
+    })
+</script>
+
+{% endblock %}
