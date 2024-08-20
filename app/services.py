@@ -33,6 +33,15 @@ def get_exercise_by_id(exercise_id):
     else:
         raise ValueError("Exercise not found")
     
+def get_exercise_list_by_input(passed_input):
+    exercise_list = [Exercise.to_dict(exercise) for exercise in exercises.find({
+        "$text": {"$search": passed_input}
+    }).limit(10)]
+    if exercise_list:
+        return exercise_list
+    else: 
+        raise ValueError("Input Invalid; Exercises not found")
+    
 # ---------------------- Fix all under this line -------------------------------------------
 
 # Service function to add a new exercise - Only admins should have access to this

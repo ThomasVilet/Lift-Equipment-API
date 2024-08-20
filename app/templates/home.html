@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <h2>Dashboard</h2>
@@ -15,7 +15,12 @@
 </div>
 <div>
     <button id="fetch-num-exercises">Fetch Num Exercises</button>
-    <div id="num-exercises"></div>
+    <div id="num-exercises-result"></div>
+</div>
+<div>
+    <input id="exercise-input" type="text" placeholder="Enter Exercise Name"/>
+    <button id="fetch-input-exercises">Fetch Exercises by Name</button>
+    <div id="input-exercise-result"></div>
 </div>
 
 <script>
@@ -70,7 +75,7 @@
         .then(response => response.json())
         .then(responseData => {
             const data = responseData.data
-            const resultDiv = document.getElementById('num-exercises');
+            const resultDiv = document.getElementById('num-exercises-result');
             if (data) {
                 resultDiv.innerHTML = `
                     <h3>Number: ${data}</h3>
@@ -83,6 +88,36 @@
             console.error('Error fetching exercise:', error);
         });
     })
+
+    document.getElementById('fetch-input-exercises').addEventListener('click', function() {
+    const input = document.getElementById('exercise-input').value;
+
+    fetch(`/api/exercises/name=${input}`)
+        .then(response => response.json())
+        .then(responseData => {
+            const exercises = responseData.data;
+            const resultDiv = document.getElementById('input-exercise-result');
+
+            if (exercises && exercises.length > 0) {
+                resultDiv.innerHTML = exercises.map(data => `
+                    <div>
+                        <h3>${data.name}</h3>
+                        <p><strong>Type:</strong> ${data.type}</p>
+                        <p><strong>Category:</strong> ${data.category}</p>
+                        <p><strong>Muscle:</strong> ${data.muscle}</p>
+                    </div>
+                `).join('');
+            } else {
+                // Display message if no exercises are found
+                resultDiv.innerHTML = '<p>No exercises found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching exercises:', error);
+            document.getElementById('input-exercise-result').innerHTML = '<p>Error retrieving exercises.</p>';
+        });
+    });
+
 </script>
 
 {% endblock %}

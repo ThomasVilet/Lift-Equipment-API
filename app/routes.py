@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify, request
 from .database import exercises
 from .utils import is_valid_objectid, create_response
-from .services import get_exercise_by_id, get_random_exercise, get_all_exercises
+from .services import get_exercise_by_id, get_random_exercise, get_all_exercises, get_exercise_list_by_input
 
 api = Blueprint('api', __name__)
 
@@ -20,7 +20,7 @@ def get_random_api_exercise():
 def get_exercises():
     try: 
         exercise_list = get_all_exercises()
-        return create_response(data=exercise_list, message="Exercise retrieved successfully")
+        return create_response(data=exercise_list, message="Exercises retrieved successfully")
     except ValueError as e:
         return create_response(message=str(e), status=400)
     
@@ -40,5 +40,13 @@ def get_exercise(id):
     try:
         exercise = get_exercise_by_id(id)
         return create_response(data=exercise, message="Exercise retrieved successfully")
+    except ValueError as e:
+        return create_response(message=str(e), status=400)
+
+@api.route('/api/exercises/name=<input>', methods=['GET'])
+def get_exercises_by_name(input):
+    try:
+        exercise_list = get_exercise_list_by_input(input)
+        return create_response(data=exercise_list, message="Exercises retrieved successfully")
     except ValueError as e:
         return create_response(message=str(e), status=400)

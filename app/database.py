@@ -13,3 +13,7 @@ client = MongoClient(connection_string)
 db = client['Exercises']
 exercises = db['Exercises'] # Collection with the data
 
+exercises.create_index([('name', 'text'),
+                        ('type', 'text'),
+                        ('category', 'text'),
+                        ('muscle', 'text')])
