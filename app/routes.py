@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify, request
 from .database import exercises
 from .utils import is_valid_objectid, create_response
-from .services import get_exercise_by_id, get_random_exercise, get_all_exercises, get_exercise_list_by_input
+from .services import get_exercise_by_id, get_random_exercise, get_all_exercises, get_exercise_list_by_field
 
 api = Blueprint('api', __name__)
 
@@ -46,7 +46,31 @@ def get_exercise(id):
 @api.route('/api/exercises/name=<input>', methods=['GET'])
 def get_exercises_by_name(input):
     try:
-        exercise_list = get_exercise_list_by_input(input)
+        exercise_list = get_exercise_list_by_field('name', input)
+        return create_response(data=exercise_list, message="Exercises retrieved successfully")
+    except ValueError as e:
+        return create_response(message=str(e), status=400)
+
+@api.route('/api/exercises/type=<input>', methods=['GET'])
+def get_exercises_by_type(input):
+    try:
+        exercise_list = get_exercise_list_by_field('type', input)
+        return create_response(data=exercise_list, message="Exercises retrieved successfully")
+    except ValueError as e:
+        return create_response(message=str(e), status=400)
+
+@api.route('/api/exercises/category=<input>', methods=['GET'])
+def get_exercises_by_category(input):
+    try:
+        exercise_list = get_exercise_list_by_field('category', input)
+        return create_response(data=exercise_list, message="Exercises retrieved successfully")
+    except ValueError as e:
+        return create_response(message=str(e), status=400)
+
+@api.route('/api/exercises/muscle=<input>', methods=['GET'])
+def get_exercises_by_muscle(input):
+    try:
+        exercise_list = get_exercise_list_by_field('muscle', input)
         return create_response(data=exercise_list, message="Exercises retrieved successfully")
     except ValueError as e:
         return create_response(message=str(e), status=400)
