@@ -74,3 +74,7 @@ def get_exercises_by_muscle(input):
         return create_response(data=exercise_list, message="Exercises retrieved successfully")
     except ValueError as e:
         return create_response(message=str(e), status=400)
+    
+    # Add insert, update, and delete // add functionality for user to play test (radio button), make display one div instead of 4 different - FRIDAY GOAL
+
+    # Authentication will be needed later when starting Villa (name thought)
