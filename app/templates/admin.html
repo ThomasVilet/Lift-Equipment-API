@@ -1,0 +1,33 @@
+<!-- only accessible by an admin / creator -->
+{% extends "index.html" %}
+
+{% block title %}Admin - Exercise API{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+<!-- Radio button - for visualizing data: Users, Exercises, Messages -->
+<div>
+    <input type="radio" id="users" name="data-visualization" value="users">
+    <label for="users">Users</label><br>
+    <input type="radio" id="exercises" name="data-visualization" value="exercises">
+    <label for="exercises">Exercises</label><br>
+    <input type="radio" id="messages" name="data-visualization" value="messages">
+    <label for="messages">Messages</label>
+</div>
+<!-- dashboard with data -->
+<div>
+    <!-- left third - vizzes -->
+    <div>
+
+    </div>
+    <!-- middle third - CRUD operations -->
+    <div>
+
+    </div>
+    <!-- right third - Listview - scrollable with edit button -->
+    <div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -2,17 +2,19 @@
 from flask import Blueprint, jsonify, request
 from .database import exercises
 from .utils import is_valid_objectid, create_response
-from .services import get_exercise_by_id, get_random_exercise, get_all_exercises, get_exercise_list_by_field
+from .services import get_exercise_by_id, get_all_exercises, get_exercise_list_by_field, get_filtered_exercises
 
 api = Blueprint('api', __name__)
 
-# test
 @api.route('/api/exercise', methods=['GET'])
-def get_random_api_exercise():
+def get_gen_exercises():
+    name = request.args.get('name')
+    type = request.args.get('type')
+    category = request.args.get('category')
+    muscle = request.args.get('muscle')
     try:
-        exercise = get_random_exercise()
-        # return exercise
-        return create_response(data=exercise, message="Exercise retrieved successfully")
+        exercise_list = get_filtered_exercises(name, type, category, muscle)
+        return create_response(data=exercise_list, message="Exercises retrieved successfully")
     except ValueError as e:
         return create_response(message=str(e), status=400)
 

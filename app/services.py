@@ -12,14 +12,6 @@ def validate_exercise_data(data):
             raise ValueError(f"Missing required field: {field}")
     return data
 
-# testing purposes
-def get_random_exercise():
-    exercise = exercises.find_one()
-    if exercise:
-        return Exercise.to_dict(exercise)
-    else:
-        raise ValueError("Exercise not found")
-
 # Service function to fetch all exercises
 def get_all_exercises():
     exercise_list = [Exercise.to_dict(exercise) for exercise in exercises.find()]
@@ -42,6 +34,22 @@ def get_exercise_list_by_field(field_name, field_value):
     else:
         raise ValueError(f"No exercises found for {field_name} '{field_value}'")
     
+def get_filtered_exercises(name=None, type=None, category=None, muscle=None):
+    query = {}
+    if name:
+        query['name'] = {"$regex": name, "$options": "i"}  
+    if type:
+        query['type'] = {"$regex": type, "$options": "i"}
+    if category:
+        query['category'] = {"$regex": category, "$options": "i"}
+    if muscle:
+        query['muscle'] = {"$regex": muscle, "$options": "i"}
+    
+    exercise_list = [Exercise.to_dict(exercise) for exercise in exercises.find(query).limit(10)]
+    if exercise_list:
+        return exercise_list
+    else:
+        raise ValueError(f"No exercises found for {query}")
 # ---------------------- Fix all under this line -------------------------------------------
 
 # Service function to add a new exercise - Only admins should have access to this

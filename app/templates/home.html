@@ -5,62 +5,43 @@
 {% block content %}
 <h2>Dashboard</h2>
 <p>Welcome to the Exercise API Dashboard.</p>
-<div>
-    <button id="fetch-exercise">Fetch Exercise</button>
-    <div id="exercise-result"></div>
-</div>
-<div>
-    <button id="fetch-all-exercises">Fetch All Exercise</button>
-    <div id="all-exercise-results"></div>
-</div>
-<div>
-    <button id="fetch-num-exercises">Fetch Num Exercises</button>
-    <div id="num-exercises-result"></div>
-</div>
-<div>
-    <input id="exercise-input-name" type="text" placeholder="Enter Exercise Name"/>
-    <button id="fetch-input-exercises-name">Fetch Exercises by Name</button>
-    <div id="input-exercise-result-name"></div>
-</div>
-<div>
-    <input id="exercise-input-type" type="text" placeholder="Enter Exercise Type"/>
-    <button id="fetch-input-exercises-type">Fetch Exercises by Type</button>
-    <div id="input-exercise-result-type"></div>
-</div>
-<div>
-    <input id="exercise-input-category" type="text" placeholder="Enter Exercise Category"/>
-    <button id="fetch-input-exercises-category">Fetch Exercises by Category</button>
-    <div id="input-exercise-result-category"></div>
-</div>
-<div>
-    <input id="exercise-input-muscle" type="text" placeholder="Enter Exercise Muscle"/>
-    <button id="fetch-input-exercises-muscle">Fetch Exercises by Muscle</button>
-    <div id="input-exercise-result-muscle"></div>
-</div>
+
+<!-- adjust all of this when pushing final deployment -->
+
+<!-- example code -->
+<!-- <div>
+    <div>
+        <button id="fetch-all-exercises">Fetch All Exercise</button>
+        <div id="all-exercise-results"></div>
+    </div>
+    <div>
+        <button id="fetch-num-exercises">Fetch Num Exercises</button>
+        <div id="num-exercises-result"></div>
+    </div>
+    <div>
+        <input id="exercise-input-name" type="text" placeholder="Enter Exercise Name"/>
+        <button id="fetch-input-exercises-name">Fetch Exercises by Name</button>
+        <div id="input-exercise-result-name"></div>
+    </div>
+    <div>
+        <input id="exercise-input-type" type="text" placeholder="Enter Exercise Type"/>
+        <button id="fetch-input-exercises-type">Fetch Exercises by Type</button>
+        <div id="input-exercise-result-type"></div>
+    </div>
+    <div>
+        <input id="exercise-input-category" type="text" placeholder="Enter Exercise Category"/>
+        <button id="fetch-input-exercises-category">Fetch Exercises by Category</button>
+        <div id="input-exercise-result-category"></div>
+    </div>
+    <div>
+        <input id="exercise-input-muscle" type="text" placeholder="Enter Exercise Muscle"/>
+        <button id="fetch-input-exercises-muscle">Fetch Exercises by Muscle</button>
+        <div id="input-exercise-result-muscle"></div>
+    </div>
+</div> -->
+
 
 <script>
-    document.getElementById('fetch-exercise').addEventListener('click', function() {
-    fetch('/api/exercise')
-        .then(response => response.json())
-        .then(responseData => {
-            const data = responseData.data
-            const resultDiv = document.getElementById('exercise-result');
-            if (data) {
-                resultDiv.innerHTML = `
-                    <h3>${data._id}</h3>
-                    <h3>${data.name}</h3>
-                    <p><strong>Type:</strong> ${data.type}</p>
-                    <p><strong>Category:</strong> ${data.category}</p>
-                    <p><strong>Muscle:</strong> ${data.muscle}</p>
-                `;
-            } else {
-                resultDiv.innerHTML = '<p>No exercise found.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching exercise:', error);
-        });
-    });
 
     document.getElementById('fetch-all-exercises').addEventListener('click', function() {
     fetch('/api/exercises')

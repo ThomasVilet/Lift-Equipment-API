@@ -1,8 +1,187 @@
 {% extends "index.html" %}
 
-{% block title %}Documentation{% endblock %}
+{% block title %}API Documentation{% endblock %}
 
 {% block content %}
-<h2>Documentation for Exercise API</h2>
-<p>Example Example</p>
+<!-- two sections - left(documentation) and right(example code) -->
+<div>
+    <h1>Documentation</h1>
+    <p>The Exercise API provides access to a library of different exercises and lifts
+        that are unique and accuarate based on modern commercial gym equipment and 
+        free weight movements. 
+    </p>
+    <P>The reason for creating this API was for users to be able to find a specific workout
+        in a matter of seconds, instead of having to be overly specific about a given movement,
+        exercise, or lift.
+    </P>
+    <div>
+        <h2>Strict Search: /api/exercise/name=input</h2>
+        <p>https://localhost//api/exercises</p>
+        <p>Returns a list of exercises with a similar input the user passed into the search.</p>
+        <h3>Parameters</h3>
+        <div>
+        <!-- bash -->
+            <p><strong>name</strong> required</p>
+            <p>The name of the exercise (e.g. Chest).</p>
+        </div>
+        <h3>Headers</h3>
+        <div>
+        <!-- bash -->
+            <p><strong>X-API-Key</strong> required</p>
+            <p>API key associated with your account.</p>
+        </div>
+    </div>
+    <div>
+        <h2>General Search: /api/exercise?name=input&muscle=input</h2>
+        <p>https://localhost//api/exercise</p>
+        <p>Returns a list of exercises with the best match given parameters assigned.</p>
+        <h3>Parameters</h3>
+        <div>
+        <!-- bash -->
+            <p><strong>name</strong> not required</p>
+            <p>The name of the exercise (e.g. Press).</p>
+            <p><strong>type</strong> not required</p>
+            <p>The type of the exercise (e.g. Machine).</p>
+            <p><strong>category</strong> not required</p>
+            <p>The category of the exercise (e.g. Core).</p>
+            <p><strong>muscle</strong> not required</p>
+            <p>The target muscle of the exercise (e.g. Chest).</p>
+        </div>
+        <h3>Headers</h3>
+        <div>
+        <!-- bash -->
+            <p><strong>X-API-Key</strong> required</p>
+            <p>API key associated with your account.</p>
+        </div>
+    </div>
+</div>
+<div>
+    <div>
+        <h2>Strict Search</h2>
+        <h3>Sample Request (Live Demo)</h3>
+        <div>
+            <!-- horizontal -->
+            <p>name</p>
+            <input id="exercise-input-name" type="text" placeholder="Exercise name">
+        </div>
+        <div>
+            <p>Strict Search: /api/exercise/name=input</p>
+            <button id="fetch-input-exercises-name">Send Request</button>
+        </div>
+        <h3>Sample Response</h3>
+        <div>
+            <p>JSON</p>
+            <div id="input-exercise-result-name"></div>
+        </div>
+        <h3>Code Example</h3>
+        <div>
+            <!-- code example -->
+        </div>
+    </div>
+    <div>
+        <h2>General Search</h2>
+        <h3>Sample Request (Live Demo)</h3>
+        <div>
+            <!-- horizontal -->
+            <p>name</p>
+            <input id="general-search-name" type="text" placeholder="Exercise name">
+            <p>type</p>
+            <input id="general-search-type" type="text" placeholder="Exercise type">
+            <p>category</p>
+            <input id="general-search-category" type="text" placeholder="Exercise category">
+            <p>muscle</p>
+            <input id="general-search-muscle" type="text" placeholder="Exercise muscle">
+        </div>
+        <div>
+            <p>General Search: /api/exercise?name=input&type=input&category=input&muscle=input</p>
+            <button id="fetch-general-input-exercises">Send Request</button>
+        </div>
+        <h3>Sample Response</h3>
+        <div>
+            <p>JSON</p>
+            <div id="input-general-exercise-result"></div>
+        </div>
+        <h3>Code Example</h3>
+        <div>
+            <!-- code example -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.getElementById('fetch-input-exercises-name').addEventListener('click', function() {
+    const input = document.getElementById('exercise-input-name').value;
+
+    fetch(`/api/exercises/name=${input}`)
+        .then(response => response.json())
+        .then(responseData => {
+            const exercises = responseData.data;
+            const resultDiv = document.getElementById('input-exercise-result-name');
+            if (exercises && exercises.length > 0) {
+                resultDiv.innerHTML = exercises.map(data => `
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `).join('');
+            } else {
+                // Display message if no exercises are found
+                resultDiv.innerHTML = '<p>No exercises found.</p>';
+            }
+
+            // if (exercises && exercises.length > 0) {
+            //     resultDiv.innerHTML = exercises.map(data => `
+            //         <div>
+            //             <h3>${data.name}</h3>
+            //             <p><strong>Type:</strong> ${data.type}</p>
+            //             <p><strong>Category:</strong> ${data.category}</p>
+            //             <p><strong>Muscle:</strong> ${data.muscle}</p>
+            //         </div>
+            //     `).join('');
+            // } else {
+            //     // Display message if no exercises are found
+            //     resultDiv.innerHTML = '<p>No exercises found.</p>';
+            // }
+        })
+        .catch(error => {
+            console.error('Error fetching exercises:', error);
+            document.getElementById('input-exercise-result-name').innerHTML = '<p>Error retrieving exercises.</p>';
+        });
+    });
+
+    document.getElementById('fetch-general-input-exercises').addEventListener('click', function() {
+        // Collect input values
+        const name = document.getElementById('general-search-name').value;
+        const type = document.getElementById('general-search-type').value;
+        const category = document.getElementById('general-search-category').value;
+        const muscle = document.getElementById('general-search-muscle').value;
+        
+        // Build the query string
+        const queryParams = new URLSearchParams();
+        if (name) queryParams.append('name', name);
+        if (type) queryParams.append('type', type);
+        if (category) queryParams.append('category', category);
+        if (muscle) queryParams.append('muscle', muscle);
+        
+        // Construct the full URL
+        const url = `/api/exercise?${queryParams.toString()}`;
+        
+        // Send the request and display the result
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const exercises = data.data;
+                const resultDiv = document.getElementById('input-general-exercise-result');
+                if (exercises && exercises.length > 0) {
+                resultDiv.innerHTML = exercises.map(exercise => `
+                    <pre>${JSON.stringify(exercise, null, 2)}</pre>
+                `).join('');
+                } else {
+                    resultDiv.innerHTML = '<p>No exercises found.</p>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('input-general-exercise-result').textContent = 'Error: ' + error;
+            });
+    });
+
+</script>
 {% endblock %}
